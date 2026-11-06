@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddBook from '@/components/AddBook'
+import DeleteBookButton from '@/components/DeleteBookButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -17,9 +18,12 @@ export default async function Dash() {
       <AddBook />
       <div className="space-y-2">
         {books.map((b: any) => (
-          <div key={b.id} className="bg-white p-3 rounded shadow flex justify-between text-sm">
+          <div key={b.id} className="bg-white p-3 rounded shadow flex justify-between items-center text-sm">
             <div><span className="font-medium">{b.title}</span> {b.author && <span className="text-gray-500">· {b.author}</span>}</div>
-            <span className="text-xs text-gray-400">{b.status}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-gray-400">{b.status}</span>
+              <DeleteBookButton id={b.id} />
+            </div>
           </div>
         ))}
         {books.length === 0 && <p className="text-gray-500">No books yet</p>}
